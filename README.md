@@ -1,18 +1,23 @@
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FBlackOut-git%2FChzzk-live-recorder&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+# chzzk-live-recorder
 
-# Chzzk Live Recorder
-Main Idea: https://github.com/park-onezero/streamlink-plugin-chzzk  
-Python 설치 필요 https://www.python.org/ftp/python/3.11.7/python-3.11.7-amd64.exe  
+치지직 방송을 자동으로 녹화하는 도구. 지정 채널의 온에어 여부를 주기적으로 확인해, 켜지면 Streamlink+FFmpeg로 녹화하고 꺼지면 다시 대기한다.
 
-기본 30초인 딜레이를 변경하려면 **line 208: time.sleep(30)** 의 30을 원하는 값으로 변경하면 됩니다.  
+## 주요 기능
 
-채널 ID 또는 채널 이름에는 URL의 `a74f103809ed746b0d867b114ceb33ab`와 같은 고유 ID 혹은 채널 이름인 `몽실s`를 입력해야됩니다.  
+- 채널 온에어 감지 및 자동 녹화 (종료 후 재개 시 다시 녹화)
+- 채널 ID·채널명 모두 지원 (채널명은 검색으로 ID 자동 해석)
+- 녹화 시각·카테고리·제목 기반 파일명, 채널명 폴더로 분류 저장
+- Streamlink·FFmpeg·치지직 플러그인이 없으면 자동 설치
+- 로그인 쿠키 기반 인증
 
-Python, Streamlink, FFmpeg, Streamlink Plugin Chzzk.py를 이용한 자동 녹화 시스템입니다.  
-실행에 필요한 모든 파일이 설치되어있는지 확인하고 아니라면 설치하는 기능이 포함되어있고  
-채널 ID 또는 채널 이름를 입력받아 방송이 켜져있는지 30초마다 확인하여 자동으로 녹화를 진행합니다.  
+## 동작 방식
 
-## 쿠키값 확인 방법
-1. 네이버 치지직에 로그인합니다 https://chzzk.naver.com/
-2. F12 -> 상단 Application -> 좌측 Cookies -> NID_AUT , NID_SES 두개의 값이 필요합니다
-![쿠키](https://github.com/BlackOut-git/Chzzk-live-recorder/assets/94197378/461e7d80-4391-4353-a27a-708b0b199205)
+`live-detail` API로 방송 상태를 조회해 `OPEN`이면 녹화, 아니면 30초 대기 후 재확인한다. Streamlink가 치지직 플러그인으로 최고 화질 스트림을 받아 로그인 쿠키와 함께 FFmpeg로 `.ts`에 기록한다.
+
+## 기술 스택
+
+Python, Streamlink + 치지직 플러그인, FFmpeg.
+
+## 제약
+
+Windows 기준(ffmpeg.exe). 네이버 로그인 쿠키 필요. 30초 폴링이라 방송 시작 직후 일부는 누락될 수 있다.
