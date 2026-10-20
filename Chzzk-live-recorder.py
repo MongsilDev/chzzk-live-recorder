@@ -39,7 +39,7 @@ async def is_package_installed(package_name):
     return output != ""
 
 async def ensure_streamlink_installed():
-    print("streamlink 설치 확인중...")
+    print("streamlink 설치 확인 중")
     if await is_package_installed("streamlink"):
         streamlink_version = await run_command("streamlink --version")
         print("streamlink 버전: ", streamlink_version)
