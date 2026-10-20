@@ -86,7 +86,7 @@ def ensure_ffmpeg_installed():
 FFMPEG_ZIP_URL = "https://github.com/BtbN/FFmpeg-Builds/releases/latest/download/ffmpeg-master-latest-win64-gpl.zip"
 
 def download_ffmpeg(file_path):
-    """FFmpeg 공식 빌드 배포처의 zip에서 ffmpeg.exe만 꺼내 설치한다."""
+    """BtbN FFmpeg-Builds 최신 릴리스 zip에서 ffmpeg.exe만 꺼내 설치한다."""
     try:
         with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp:
             response = requests.get(FFMPEG_ZIP_URL, stream=True)
