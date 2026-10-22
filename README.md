@@ -25,5 +25,7 @@ python Chzzk-live-recorder.py
 ```
 
 실행하면 네이버 로그인 쿠키 `NID_AUT`, `NID_SES` 값과 채널, 파일명 형식을 차례로 묻습니다.\
+쿠키 값은 naver.com에 로그인한 브라우저의 개발자 도구에서 Cookies의 naver.com 항목을 열어 복사합니다.\
 쿠키는 `plugins/cookies.txt`에 저장되어 다음 실행부터는 다시 입력하지 않습니다.\
+쿠키가 만료되면 `plugins/cookies.txt`를 지우고 다시 실행해 새 값을 입력합니다.\
 FFmpeg는 `ffmpeg.exe`를 내려받아 쓰므로 Windows에서 실행해야 합니다.

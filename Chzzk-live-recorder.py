@@ -45,7 +45,7 @@ async def ensure_streamlink_installed():
         print("streamlink 버전: ", streamlink_version)
         return True
     else:
-        print("streamlink가 설치되지 않았습니다. 설치를 시작합니다.")
+        print("streamlink가 설치되지 않았습니다.\n설치를 시작합니다.")
         await ensure_package_installed("streamlink")
         return False
 
@@ -62,7 +62,7 @@ def ensure_chzzk_installed():
         print("chzzk.py 파일이 설치되어 있습니다. 파일 경로: ", chzzk_file_path)
         return True
     else:
-        print("chzzk.py 파일이 없습니다. 다운로드 및 설치를 시작합니다.")
+        print("chzzk.py 파일이 없습니다.\n내려받아 설치합니다.")
         download_file("https://raw.githubusercontent.com/park-onezero/streamlink-plugin-chzzk/main/chzzk.py", chzzk_file_path)
         return False
 
@@ -79,7 +79,7 @@ def ensure_ffmpeg_installed():
         print("ffmpeg.exe 파일이 설치되어 있습니다. 파일 경로: ", ffmpeg_file_path)
         return True
     else:
-        print("ffmpeg.exe 파일이 없습니다. 다운로드 및 설치를 시작합니다.")
+        print("ffmpeg.exe 파일이 없습니다.\n내려받아 설치합니다.")
         download_ffmpeg(ffmpeg_file_path)
         return False
 
@@ -101,7 +101,7 @@ def download_ffmpeg(file_path):
         os.remove(zip_path)
         print("ffmpeg.exe 설치 완료: ", file_path)
     except Exception as e:
-        print(f"ffmpeg 다운로드 및 설치 중 오류 발생: {e}")
+        print(f"ffmpeg를 내려받지 못했습니다: {e}\n인터넷 연결을 확인하고 다시 실행해주세요.")
 
 def download_and_run_exe(url):
     try:
@@ -111,7 +111,7 @@ def download_and_run_exe(url):
             exe_path = tmp.name
         subprocess.call(exe_path)
     except Exception as e:
-        print(f"실행 파일 다운로드 및 실행 중 오류 발생: {e}")
+        print(f"실행 파일을 내려받아 실행하지 못했습니다: {e}\n인터넷 연결을 확인하고 다시 실행해주세요.")
 
 def is_file_exists(file_path):
     return os.path.isfile(file_path)
@@ -122,7 +122,7 @@ def download_file(url, file_path):
         with open(file_path, 'wb') as f:
             f.write(response.content)
     except Exception as e:
-        print(f"파일 다운로드 및 저장 중 오류 발생: {e}")
+        print(f"파일을 내려받지 못했습니다: {e}\n인터넷 연결을 확인하고 다시 실행해주세요.")
 
 def get_channel_info(streamer):
     try:
@@ -142,7 +142,7 @@ def get_channel_info(streamer):
 
         return channel_name, liveTitle, liveCategoryValue, status
     except Exception as e:
-        print(f"채널 정보 가져오기 중 오류 발생: {e}")
+        print(f"채널 정보를 가져오지 못했습니다: {e}\n인터넷 연결과 쿠키 값을 확인해주세요.")
         return None
 
 def get_cookies():
@@ -156,9 +156,9 @@ def get_cookies():
 
     if not os.path.isfile(cookies_file_path) or os.path.getsize(cookies_file_path) == 0:
         with open(cookies_file_path, 'w') as f:
-            print("cookies.txt 파일이 없거나 비어있습니다. 쿠키 값을 입력해주세요.\n참고:https://github.com/MongsilDev/chzzk-live-recorder")
-            NID_AUT = input("NID_AUT 쿠키 값을 입력하세요: ")
-            NID_SES = input("NID_SES 쿠키 값을 입력하세요: ")
+            print("cookies.txt 파일이 없거나 비어 있습니다.\n쿠키 값을 입력해주세요.\n복사 방법: https://github.com/MongsilDev/chzzk-live-recorder#실행")
+            NID_AUT = input("NID_AUT 쿠키 값을 입력해주세요: ")
+            NID_SES = input("NID_SES 쿠키 값을 입력해주세요: ")
             f.write(f"NID_AUT={NID_AUT}; NID_SES={NID_SES};")
     else:
         print(f"cookies.txt 파일 경로: {cookies_file_path}")
@@ -187,7 +187,7 @@ async def run_streamlink(streamer, filename_format):
         file_path = os.path.join(channel_name, sanitized_filename)
         await run_command(f'streamlink --plugin-dirs "./plugins" https://chzzk.naver.com/live/{streamer} best --chzzk-cookies "{cookies}" -o "{file_path}" --ffmpeg-ffmpeg "./plugins/ffmpeg.exe" --ffmpeg-copyts')
     except Exception as e:
-        print(f"streamlink 실행 중 오류 발생: {e}")
+        print(f"녹화를 시작하지 못했습니다: {e}\n방송 상태를 다시 확인합니다.")
 
 async def main():
     try:
@@ -199,13 +199,13 @@ async def main():
             return
 
         get_cookies()
-        streamer = input("채널 아이디 또는 채널 이름을 입력하세요: ")
-        print("1: 현재시간_카테고리_방송제목")
-        print("2: 현재시간_카테고리")
-        filename_format = input("파일 저장 형식을 선택하세요: ")
+        streamer = input("채널 ID나 채널 이름을 입력해주세요: ")
+        print("1: 녹화시각_카테고리_방송제목")
+        print("2: 녹화시각_카테고리")
+        filename_format = input("파일 저장 형식을 선택해주세요: ")
         while filename_format not in ['1', '2']:
-            print("잘못된 입력입니다. 다시 입력해주세요.")
-            filename_format = input("파일 저장 형식을 선택하세요: ")
+            print("잘못된 입력입니다.\n다시 입력해주세요.")
+            filename_format = input("파일 저장 형식을 선택해주세요: ")
         while True:
             channel_info = get_channel_info(streamer)
             if channel_info is None:
@@ -219,18 +219,18 @@ async def main():
                     streamer = search_json['content']['data'][0]['channel']['channelId']
                     channel_info = get_channel_info(streamer)
                 else:
-                    print(f"채널 {streamer}을(를) 찾을 수 없습니다")
+                    print(f"'{streamer}' 채널을 찾지 못했습니다.\n채널 ID나 채널 이름을 확인하고 다시 실행해주세요.")
                     break
             status = channel_info[3]
             if status == 'OPEN':
                 await run_streamlink(streamer, filename_format)
             else:
-                print("방송이 종료되었습니다. 30초 후에 다시 확인합니다.")
+                print("방송 중이 아닙니다.\n30초 뒤 다시 확인합니다.")
                 time.sleep(30)
     except Exception as e:
-        print(f"오류 발생: {str(e)}")
+        print(f"오류가 발생해 종료합니다: {str(e)}\n다시 실행해주세요.")
     finally:
-        input("엔터키를 눌러 종료하세요.")
+        input("엔터 키를 눌러 종료해주세요.")
 
 if __name__ == "__main__":
     asyncio.run(main())
